@@ -1,0 +1,235 @@
+{% extends 'base.html' %} {% block title %} Dashboard {% endblock %}
+<!-- next -->
+{% block content %}
+
+{% include 'includes/items_modals.html' %}
+
+<div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="myModalLabel">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Modal body text goes here.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- recommend and add meal section -->
+<div class="container-fluid pt-2 w-75">
+  <div class="row mt-5" style="height:200px;">
+
+    <div class="col-md-6 text-center">
+      <a href="{{url_for('addmeal_page')}}" class="main-buttons text-decoration-none">
+        <div class="section section-one pt-4 rounded me-2 fs-1 fw-bolder">Add Meal</div>
+      </a>
+    </div>
+    <div class="col-md-6 text-center">
+      <a href="{{url_for('result_page')}}" class="main-buttons text-decoration-none">
+        <div class="section section-two pt-4 rounded ms-2 fs-1 fw-bolder">Recommend Now</div>
+      </a>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- daily nutritional details chart -->
+<div class="doughnut py-5">
+  <div class="container text-center">
+    <div class="row">
+      <!-- <div class="position-realtive overflow-hidden p-3 p-md-5 m-md-3 text-center " style="color:white"> -->
+        <div class="col-md-12 mb-2 mx-auto">
+          <h1 class="h1-chart">YOUR DAILY STATUS</h1>
+          <!-- <p>Click on one items to start buying</p> -->
+        </div>
+    </div>
+  </div>
+  
+  <div class="container d-flex dchart-body py-5">
+    <div class="Chartbox col-md-4 text-center">
+      <div class="ChartCenter">{{ '%0.2f'| format(chartCons[0]|float)}}</div> 
+      <!-- <div class="ChartCenter1">{{ '%0.2f'| format(chartReqs[0]|float)}}</div>  -->
+      <span class="fs-4">Calories</span>
+      <div class="dchart"><canvas id="caloriesChart"></canvas></div>
+    </div>
+    <div class="Chartbox col-md-4 text-center">
+      <div class="ChartCenter">{{'%0.2f'| format(chartCons[1]|float)}}</div>
+      <!-- <div class="ChartCenter1">{{ '%0.2f'| format(chartReqs[1]|float)}}</div> -->
+      <span class="fs-4">Fat</span>
+      <div class="dchart"><canvas id="fatChart"></canvas></div> 
+    </div>
+    <div class="Chartbox col-md-4 text-center">
+      <div class="ChartCenter">{{'%0.2f'| format(chartCons[2]|float)}}</div>
+      <!-- <div class="ChartCenter1">{{ '%0.2f'| format(chartReqs[2]|float)}}</div> -->
+      <span class="fs-4">Protein</span>
+      <div class="dchart"><canvas id="proteinChart"></canvas></div> 
+    </div>
+  </div>
+</div>
+
+
+
+
+<div class="container text-center pt-5 ">
+  <div class="row">
+    <!-- <div class="position-realtive overflow-hidden p-3 p-md-5 m-md-3 text-center " style="color:white"> -->
+      <div class="col-md-12 py-3 ">
+        <h1>YOUR MEAL HISTORY</h1>
+        <!-- <p>Click on one items to start buying</p> -->
+      </div>
+  </div>
+  <div class="row">
+      <table class="table table-hover border-bottom border-light w-75 mt-3 mx-auto">
+        <thead class="bg-light text-dark">
+          <tr>
+            <!-- Your Columns HERE -->
+            <th scope="col">MEAL</th>
+            <th scope="col">CATEGORY</th>
+            <th scope="col">NO OF SERVINGS</th>
+            <th scope="col">DATE</th>
+            <th scope="col">TIME</th>
+            <th scope="col">OPTIONS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Your rows inside the table HERE: -->
+          {% for item in items %}
+          <!-- create a new modals per new items -->
+          <tr>
+            <td class="text-light">{{item.name}}</td>
+            <td class="text-light">{{item.mealType}}</td>
+            <td class="text-light">{{item.servings}}</td>
+            <td class="text-light">{{item.datetime_posted.strftime("%d-%m-%Y")}}</td>
+            <td class="text-light">{{item.datetime_posted.strftime("%H:%M")}}</td>
+            
+            <td>
+
+              <form action="{{ url_for('delete_item', item_id=item.id) }}" method="post">
+                <input type="hidden" name="_method" value="DELETE">
+                <button type="submit" class="btn btn-danger">Delete</button>
+              </form>
+
+              <!-- <button class="btn btn-outline btn-danger" data-toggle="modal" data-target="#">Delete</button> -->
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+  </div>
+</div>
+
+<script type="text/javascript">
+    // Show modal when page loads
+    {% if show_modal %}
+      var myModal = new bootstrap.Modal(document.getElementById('exampleModal'));
+      myModal.show();
+    {% endif %}
+
+    // for dounaught chart
+    
+    let Con = {{chartCons}};
+    let Req = {{chartReqs}};
+    let perCon = []
+    let perReq = []
+    
+    console.log(Con,Req)
+
+    var options = {
+      responsive: true, 
+      maintainAspectRatio: false,
+      cutoutPercentage: 50,
+      title: {
+        display: true,
+        text: 'My Doughnut Chart'
+      },
+    };
+  
+    const data1 = {
+      datasets: [{
+        label: 'Amount',
+        data: [Con[0],Req[0]-Con[0]],
+        borderColor: 'rgb(36, 36, 35)',  
+        backgroundColor: [
+          '#2a9d8f',
+          '#264653'
+        ],
+        hoverOffset: 4
+      }]
+    };
+
+    if (data1.datasets[0].data[0] > Req[0]) {
+      // Set the second data value 0
+      data1.datasets[0].data[1] = 0;
+    }
+  
+  
+    const data2 = {
+      datasets: [{
+        label: 'Amount',
+        data: [Con[1],Req[1]-Con[1]],
+        borderColor: 'rgb(36, 36, 35)',  
+        backgroundColor: [
+          '#e9c46a',
+          '#264653'
+        ],
+        hoverOffset: 4
+      }]
+    };
+  
+    if (data2.datasets[0].data[0] > Req[1]) {
+      // Set the second data value 0
+      data2.datasets[0].data[1] = 0;
+    }
+
+    const data3 = {
+      datasets: [{
+        label: 'Amount',
+        data: [Con[2],Req[2]-Con[2]],
+        borderColor: 'rgb(36, 36, 35)',  
+        backgroundColor: [
+          '#e76f51',
+          '#264653'
+        ],
+        hoverOffset: 4
+      }]
+    };
+  
+    if (data3.datasets[0].data[0] > Req[2]) {
+      // Set the second data value 0
+      data3.datasets[0].data[1] = 0;
+    }
+
+    var ctx1 = document.getElementById("caloriesChart").getContext("2d");
+    var myChart1 = new Chart(ctx1, {
+      type: 'doughnut',
+      data: data1,
+      options: options
+    });
+  
+    var ctx2 = document.getElementById("fatChart").getContext("2d");
+    var myChart2 = new Chart(ctx2, {
+      type: 'doughnut',
+      data: data2,
+      options: options
+    });
+  
+    var ctx3 = document.getElementById("proteinChart").getContext("2d");
+    var myChart3 = new Chart(ctx3, {
+      type: 'doughnut',
+      data: data3,
+      options: options
+    });
+
+</script>
+
+{% endblock %}
+

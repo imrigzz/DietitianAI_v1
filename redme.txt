@@ -1,0 +1,4 @@
+To run using ngrok
+1. Start Flask app at aany port 
+2. start ngrok at same port 
+3. Eg: flask at 5000, then "ngrok http 5000"

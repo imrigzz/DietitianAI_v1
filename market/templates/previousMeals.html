@@ -1,0 +1,98 @@
+
+{% extends 'base.html' %} {% block title %} Add Meal {% endblock %}
+<!-- next -->
+{% block content %}
+
+
+    <div class="loader" id="loaderid">
+        <span class="letter">&nbsp;</span>
+        <span class="letter">R</span>
+        <span class="letter">E</span>
+        <span class="letter">C</span>
+        <span class="letter">O</span>
+        <span class="letter">G</span>
+        <span class="letter">N</span>
+        <span class="letter">I</span>
+        <span class="letter">S</span>
+        <span class="letter">I</span>
+        <span class="letter">N</span>
+        <span class="letter">G</span>
+        <span class="letter">&nbsp;</span>
+        <span class="letter">&nbsp;</span>
+        <span class="letter">U</span>
+        <span class="letter">P</span>
+        <span class="letter">L</span>
+        <span class="letter">O</span>
+        <span class="letter">A</span>
+        <span class="letter">D</span>
+        <span class="letter">I</span>
+        <span class="letter">N</span>
+        <span class="letter">G</span>
+    </div>
+
+    <div class="container text-center my-2 py-4">
+        <div>
+            <h1 id="title_p">Oops,<span class="text-warning">
+                Forgot to add meal?
+            </span></h1>
+            <!-- <span class=" my-2" id="message">
+                Please add picture of <span class="text-info">food</span> that you consumed
+            </span> -->
+        </div>
+    </div>
+
+
+    <div class="container mt-5 text-center">
+        <div class="row">
+            <div class="col-md-8 offset-md-2 ">
+                {% for fn_obj in filenames %}
+                    <img class="my-2 mx-2" id="uploaded_image" src="{{ url_for('static', filename='uploads/'+fn_obj.filename ) }}">   
+                {% endfor %}
+            </div>
+
+        </div>
+
+        <h6 class="my-3">Step 1: <span class="text-warning">Add all foods images seperately [preview avilable when add] </span></h6>
+        <form  class="text-center pt-1 pb-2 " method="POST" action="/previousMeals" enctype="multipart/form-data">
+            <div class="container d-flex flex-row w-50 px-0">
+                <input type="file" name="file" class="form-control rounded" id="formFile" autocomplete="off" required>
+                <input type="submit" value="Add Food" name="submitAction" class="btn btn-info ms-2 rounded">
+            </div>
+        </form>
+
+
+
+
+        <div class="mx-auto pt-1 pb-2">
+            <h6 class="my-3">Step 2: <span class="text-warning">Select date, time and meal type and Upload </span></h6>
+            <form action="/market" method="post">
+                <div class="input-group mb-3 w-50 mx-auto">
+                    <span class="input-group-text rounded-end rounded" id="basic-addon1">Date and Time</span>
+                    <input type="Date" class="form-control" placeholder="date" name="food_date" required>
+                    <input type="time" class="form-control rounded-start rounded" placeholder="time" name="food_time" required>
+                </div>
+                <select class="form-select mb-3 w-50 mx-auto rounded" name="meal-type" required>
+                    <option disabled selected>Choose meal type</option>
+                    <option value="Breakfast">Breakfast</option>
+                    <option value="Lunch">Lunch</option>
+                    <option value="Dinner">Dinner</option>
+                    <option value="Snacks">Snacks</option>
+                </select>
+                <button id="change" name="submitAction" type="submit"  value="addToDBP" class="btn btn-success w-50 rounded">Upload food to Database</button>
+            </form>
+        </div>
+
+
+    </div>
+    <a href="{{ url_for('addmeal_page') }}" class="text-decoration-none text-center">
+        <div class="bg-danger rounded py-2 text-light w-25  mx-auto mt-5">
+            Back 
+        </div>
+    </a>
+
+
+
+
+    <script src="{{url_for('static', filename='app.js')}}"></script>
+{% endblock %}
+

@@ -1,0 +1,84 @@
+{% extends 'base.html' %} {% block title %} Add meal {% endblock %}
+<!-- next -->
+{% block content %}
+    <div class="loader" id="loaderid">
+        <span class="letter">&nbsp;</span>
+        <span class="letter">R</span>
+        <span class="letter">E</span>
+        <span class="letter">C</span>
+        <span class="letter">O</span>
+        <span class="letter">G</span>
+        <span class="letter">N</span>
+        <span class="letter">I</span>
+        <span class="letter">S</span>
+        <span class="letter">I</span>
+        <span class="letter">N</span>
+        <span class="letter">G</span>
+        <span class="letter">&nbsp;</span>
+        <span class="letter">&nbsp;</span>
+        <span class="letter">U</span>
+        <span class="letter">P</span>
+        <span class="letter">L</span>
+        <span class="letter">O</span>
+        <span class="letter">A</span>
+        <span class="letter">D</span>
+        <span class="letter">I</span>
+        <span class="letter">N</span>
+        <span class="letter">G</span>
+    </div>
+
+    <div class="container text-center mt-5">
+        <div class="my-5">
+            <h1 id="title_p">Hi<span class="text-warning">
+                What are you eating?
+            </span></h1>
+            <span class=" my-2" id="message">
+                Please add picture of <span class="text-info">food</span> that you consumed
+            </span>
+        </div>
+    </div>
+
+
+    <div class="container-fluid text-center w-50">
+        <div class="mb-2 pb-2">
+                {% for fn_obj in filenames %}
+                    <img class="my-2 mx-1" id="uploaded_image" src="{{ url_for('static', filename='uploads/'+fn_obj.filename ) }}">   
+                {% endfor %}
+        </div>
+
+        
+        <div class="container w-75 mx-auto pt-2 ps-0 pe-0">
+            <form class="d-flex flex-row" method="POST" action="/addmeal" enctype="multipart/form-data">
+                <input type="file" name="file" class="form-control rounded" id="formFile" autocomplete="off" required>
+                <input type="submit" value="Add Food" name="submitAction" class="btn btn-info ms-2 rounded">
+            </form>
+        </div>
+
+
+        <div class=" w-75 mt-3 mx-auto">
+            <form action="/market" method="post">
+                <select class="form-select mb-3 mx-auto rounded" name="meal-type">
+                    <option disabled selected>Choose meal type</option>
+                    <option value="Breakfast">Breakfast</option>
+                    <option value="Lunch">Lunch</option>
+                    <option value="Dinner">Dinner</option>
+                    <option value="Snacks">Snacks</option>
+                </select>
+                <button id="change" name="submitAction" type="submit"  value="addToDB" class="btn btn-success w-100 rounded">Upload food to Database</button>
+            </form>
+
+        </div>
+
+    </div>
+
+    <a href="{{ url_for('previousMeals_page') }}" class="text-decoration-none text-center">
+        <div class="bg-danger rounded py-2 text-light w-25  mx-auto mt-5">
+            Add Previous Meals
+        </div>
+    </a>
+
+
+
+
+    <script src="{{url_for('static', filename='app.js')}}"></script>
+{% endblock %}

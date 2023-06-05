@@ -1,0 +1,65 @@
+{% extends 'base.html' %} {% block title %} Register Page {% endblock %} {%
+block content %}
+<body class="text-center">
+  <br />
+  <div class="container auth-box l-box mt-5 py-5 px-5 rounded">
+    <form method="POST" class="form-register px-lg-4" style="color: white">
+      <!-- to protect form hackers -->
+      {{ form.hidden_tag() }}
+      <h1 class="h3 mb-3 font-weight-normal">Please Create your Account</h1>
+      <!-- username -->
+      <br />
+      <!-- {{form.username.label()}} -->
+      {{form.username(class="form-control",placeholder="User Name")}}
+      <br />
+      <!-- email -->
+      <!-- {{form.email_address.label()}} -->
+      {{form.email_address(class="form-control",placeholder="Email Address")}}
+      <br />
+
+      <div class="row g-3">
+        <div class="col">
+           <!-- Gender -->
+          {{form.gender(class="form-control",placeholder="Select Gender")}}
+        </div>
+        <div class="col">
+          <!-- Age -->
+          {{form.age(class="form-control",placeholder="Age in Years")}}
+        </div>
+      </div>
+      <br/>
+
+      <div class="row g-3">
+        <div class="col">
+            <!-- height -->
+            {{form.height(class="form-control",placeholder="Height in cm")}}
+        </div>
+        <div class="col">
+            <!-- Height -->
+            {{form.weight(class="form-control",placeholder="Weight in kg")}}
+        </div>
+      </div>
+      <br/>
+     
+      <!-- password -->
+      <!-- {{form.password1.label()}} -->
+      {{form.password1(class="form-control",placeholder="Password")}}
+      <br />
+      <!-- confirm password -->
+      <!-- {{form.password2.label()}} -->
+      {{form.password2(class="form-control",placeholder="Confirm Password")}}
+      <br />
+      <!-- activity -->
+      {{form.activity(class="form-control",placeholder="Select activity level")}}
+      <br />
+      <!-- submit -->
+      {{form.submit(class="btn btn-outline-light")}}
+      <br/>
+      <div class="checkbox pt-3">
+        <h6>Already have an account? <a href="{{url_for('login_page')}}">Login</a></h6>
+      </div>
+    </form>
+  </div>
+</body>
+
+{% endblock %}

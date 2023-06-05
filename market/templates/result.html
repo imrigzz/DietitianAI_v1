@@ -1,0 +1,248 @@
+{% extends 'base.html' %} {% block title %} Recommendation {% endblock %}
+<!-- next -->
+
+{% block content %}
+
+   <div class="container my-5">
+        <div class="text-center">
+            <div class="recommend bg-dark border border-warning">
+                <div class=" py-5">
+                    <h1> <span class="text-warning">Hi {{user}}</span> please choose meal type? </h1>
+                </div>
+    
+                <div class="pt-2 pb-4">
+                    <form action="/result" method="post" class="container">
+                        <div class="row">
+                            <div class="col-md-2"></div>
+                            <div class="col-md-6">
+                                <select class="form-select form-select-lg rounded" name="meal-type">
+                                    <option disabled selected>Choose meal type</option>
+                                    <option value="Breakfast">Breakfast</option>
+                                    <option value="Lunch">Lunch</option>
+                                    <option value="Dinner">Dinner</option>
+                                    <option value="Snacks">Snacks</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="submit" class="btn btn-success btn-lg rounded w-100">Recommend</button>
+                            </div>
+                            <div class="col-md-2"></div>
+                        </div> 
+                    </form>
+                    <div class="pt-5">
+                        <h1><span class="text-warning">{{meal_type}}</span> Recommendation</h1>
+                    </div>  
+                </div>
+    
+                <div class="container-fluid">
+                    <div class="row bg-warning text-dark">
+                        {% for item in recommend_result %}
+                            <div class="col-md-4 food-card pt-4 border border-warning">
+                                <h2>{{ item }}</h2>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+    
+                <div class="text-center">
+                    <div class="py-4">
+                        <p>Your top three meal recommendation for Nutritious healthy Life</p>     
+                    </div>
+    
+                </div>
+            </div>
+
+
+
+
+            <div class="nchart container py-5">
+                <div class="row text-center mb-5 border-bottom border-light pb-5">
+                    <div class="col-md-12">
+                    <span class="heading">{{user}}'S CONSUMPTION STATUS</span> 
+                    <br>
+                    [ <span style="color:#32FF54">GREEN BAR: </span>Nutrient consumption exceed required value ]
+                    </div>
+                </div>
+                <div class="row mx-auto w-75 text-light">
+                    <canvas id="myChart"></canvas>
+                </div>
+            </div>
+
+
+            <div class="container w-100">
+                <table class="table table-hover table-dark border border-light mt-5 ">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">STATUS</th>
+                        <th scope="col">Calories</th>
+                        <th scope="col">Total_Fat</th>
+                        <th scope="col">Cholesterol</th>
+                        <th scope="col">Sodium</th>
+                        <th scope="col">Potassium</th>
+                        <th scope="col">Total_Carbohydrates</th>
+                        <th scope="col">Protein</th>
+                        <th scope="col">Calcium</th>
+                        <th scope="col">Iron</th>
+        
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        {% for stat in stats_daily %}
+                            <td>Today</td>
+                            <td>{{'%0.2f'| format(stat.Calories|float)}}</td>
+                            <td>{{'%0.2f'| format(stat.Total_Fat|float)}}</td>
+                            <td>{{'%0.2f'| format(stat.Cholesterol|float)}}</td>
+                            <td>{{'%0.2f'| format(stat.Sodium|float)}}</td>
+                            <td>{{'%0.2f'| format(stat.Potassium|float)}}</td>
+                            <td>{{'%0.2f'| format(stat.Total_Carbohydrates|float)}}</td>
+                            <td>{{'%0.2f'| format(stat.Protein|float)}}</td>
+                            <td>{{'%0.2f'| format(stat.Calcium|float)}}</td>
+                            <td>{{'%0.2f'| format(stat.Iron|float)}}</td> 
+                        {% endfor %}     
+                    </tr>
+                    <!-- <tr>
+                        <td>Daily required</td>
+                        <td>2000</td>
+                        <td>78</td>
+                        <td>0.3</td>
+                        <td>2.3</td>
+                        <td>4.7</td>
+                        <td>275</td>
+                        <td>50</td>
+                        <td>1.4</td>
+                        <td>0.018</td>
+                    </tr> -->
+                    <tr>
+                        {% for stat in stats_weekly %}
+                            <td>Current Week</td>
+                            <td>{{'%0.2f'| format(stat.Calories|float)}}</td>
+                            <td>{{'%0.2f'| format(stat.Total_Fat|float)}}</td>
+                            <td>{{'%0.2f'| format(stat.Cholesterol|float)}}</td>
+                            <td>{{'%0.2f'| format(stat.Sodium|float)}}</td>
+                            <td>{{'%0.2f'| format(stat.Potassium|float)}}</td>
+                            <td>{{'%0.2f'| format(stat.Total_Carbohydrates|float)}}</td>
+                            <td>{{'%0.2f'| format(stat.Protein|float)}}</td>
+                            <td>{{'%0.2f'| format(stat.Calcium|float)}}</td>
+                            <td>{{'%0.2f'| format(stat.Iron|float)}}</td> 
+                        {% endfor %}     
+                    </tr>
+                    <tr>
+                        {% for stat in stats_monthly %}
+                            <td>Current Month</td>
+                            <td>{{'%0.2f'| format(stat.Calories|float)}}</td>
+                            <td>{{'%0.2f'| format(stat.Total_Fat|float)}}</td>
+                            <td>{{'%0.2f'| format(stat.Cholesterol|float)}}</td>
+                            <td>{{'%0.2f'| format(stat.Sodium|float)}}</td>
+                            <td>{{'%0.2f'| format(stat.Potassium|float)}}</td>
+                            <td>{{'%0.2f'| format(stat.Total_Carbohydrates|float)}}</td>
+                            <td>{{'%0.2f'| format(stat.Protein|float)}}</td>
+                            <td>{{'%0.2f'| format(stat.Calcium|float)}}</td>
+                            <td>{{'%0.2f'| format(stat.Iron|float)}}</td> 
+                        {% endfor %}     
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+   <script>
+
+        const ctx = document.getElementById('myChart');
+        let daily_values = {{ daily_values_list|safe }};
+        let global_daily_values = [2000,78,0.3,2.3,4.7,275,50,1.4,0.018];
+        let weekly_values = {{weekly_values_list|safe }};
+        let global_weekly_values = [14000,546,2.1,16.099999999999998,32.9,1925,350,9.8,0.126];
+        let monthly_values = {{ monthly_values_list|safe }};
+        let global_monthly_values = [60000,2340,9.0,69.0,141.0,8250,1500,42.0,0.5399999999999999];
+        let emparr = [];
+        let weekarr = [];
+        let montharr = [];
+        for(let i=0; i<daily_values.length; i++){
+            emparr[i]=(daily_values[i]/global_daily_values[i])*100;
+            weekarr[i]=(weekly_values[i]/global_weekly_values[i])*100;
+            montharr[i]=(monthly_values[i]/global_monthly_values[i])*100;
+        }
+        console.log(emparr);
+        console.log(weekarr);
+        console.log(montharr)
+
+
+
+        let data_val = {
+            labels: [ 'Calories','Total_Fat','Cholesterol','Sodium','Potassium','Total_Carbohydrates','Protein','Calcium','Iron'],
+            datasets: [
+            {
+                label: 'Monthly Nutritional Stats',
+                data: montharr,
+                backgroundColor: montharr.map((value) => value > 100 ? '#32FF54' : 'rgba(54,162,235,0.8)'),
+                borderColor: 'rgba(54,162,235,1)',
+                borderWidth: 1
+            },
+            {
+                label: 'Weekly Nutritional Stats',
+                data: weekarr,
+                backgroundColor: weekarr.map((value) => value > 100 ? '#32FF54' : 'rgba(255,99,132,0.8)'),
+                borderColor: 'rgba(255,99,132,1)',
+                borderWidth: 0
+            },
+            {
+                label: 'Daily Nutritional Stats',
+                data: emparr,
+                backgroundColor: emparr.map((value) => value > 100 ? '#32FF54' : 'rgba(225,300,192,0.8)'),
+                borderColor: 'rgba(75,192,192,1)',
+                borderWidth: 0
+            }
+            ]
+        }
+
+   
+
+        let options = {
+            responsive: true,
+            scales: {
+                y: {
+                beginAtZero: true,
+                max:100,
+                ticks: {
+                    color: 'white' // change grid and label color for y-axis
+                  },
+                gridLines: {
+                    color: 'white'
+                }
+                
+                },
+                x: {
+                    ticks: {
+                      color: 'white' // change grid and label color for x-axis
+                    },
+                    gridLines: {
+                        color:'white'
+                    }
+                  }
+            }
+        }
+
+        function getBgColors() {
+            var array  = emparr;
+          
+            var bg = array.map(a => a > 100 ? "red" : "blue");
+            return bg;
+        }
+
+        let chart = new Chart(ctx, {
+            type: 'bar',
+            data: data_val,
+            options: options
+        });
+
+
+        function activateDiv() {
+            var myDiv = document.getElementsByClassName("rec_res");
+            myDiv.classList.add("active");
+        }
+
+   </script>
+   
+
+{% endblock %}
+

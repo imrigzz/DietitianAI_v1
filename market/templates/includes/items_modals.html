@@ -1,0 +1,90 @@
+<style>
+  .modal-dark .modal-content {
+      background-color: #264653;
+      color: #efefef;
+  }
+
+  .btnConfirm{
+    background-color: #2a9d8f;
+  }
+  .btnCancel{
+    background-color: #e76f51;
+  }
+  
+</style>
+
+
+<!-- Modal -->
+<div class="modal modal-dark fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered  ">
+    <div class="modal-content">
+      <div class="modal-header border-0 modalHead w-100">
+        <h5 class="modal-title mx-auto ps-4" id="exampleModalLabel"> Foods Recognised </h5>
+        <div class="">
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+      </div>
+      <div class="modal-body border-0">
+          <div class="px-5 modal-items pt-2 pb-3 bg-dark text-center">
+            <!-- {% for ext in serving_ext%}
+              <p class="text-light">{{ext}}</p>
+            {%endfor%} -->
+            <div class="container pt-2 pb-1">
+              <div class="row">
+                <div class="col-md-3">FOOD</div>
+                <div class="col-md-5"></div>
+                <div class="col-md-4">SERVINGS</div>
+              </div>
+            </div>
+            <form action="{{url_for('food_page')}}" method="post" class="mx-auto" >
+              {% for food, ext in serving_ext.items() %}
+                <div class="d-flex justify-content-between pt-3 pb-2 align-items-center text-center"> 
+                  <div class="d-flex align-items-center text-center">
+                    <input type="checkbox" name="checkbox-name" class="m-cbox" value="{{food}}">
+                    <div class="ps-3">{{ food }}</div>
+                  </div>
+
+                  <div class="d-flex align-items-center text-center bg-dark text-light border border-dark">
+                    <div type="button" class="m-btn px-2 minusBtn" >-</div>
+                    <div>
+                      <input id="counter" class="px-2 bg-dark text-light border border-dark m-input" name="servings{{food}}" type="text" value="0">
+                    </div>
+                    <div type="button" class="m-btn px-2 plusBtn" >+</div>
+                    <div class="text-light ps-2">{{ext}}</div>
+                  </div>
+                </div>
+              {% endfor %}
+              <input type="hidden" name="foods" value="{{ data }}">
+              <button type="submit" class="btn btnConfirm text-light" name="submitAction" value="addToDBModal">Confirm</button>
+              <button type="button" class="btn btnCancel text-light" data-bs-dismiss="modal">Cancel</button>
+            </form>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Get all the counter input fields
+  const counterInputs = document.querySelectorAll('input[name^="servings"]');
+
+  // Loop through each counter input field
+  counterInputs.forEach(counterInput => {
+    // Get the minus and plus buttons for the current food item
+    const minusBtn = counterInput.parentElement.previousElementSibling;
+    const plusBtn = counterInput.parentElement.nextElementSibling;
+
+    // Add event listeners to the minus and plus buttons
+    minusBtn.addEventListener('click', () => {
+      // Decrease the value of the current counter input field
+      if (parseInt(counterInput.value) > 0) {
+        counterInput.value = parseInt(counterInput.value) - 1;
+      }
+    });
+
+    plusBtn.addEventListener('click', () => {
+      // Increase the value of the current counter input field
+      counterInput.value = parseInt(counterInput.value) + 1;
+    });
+  });
+</script>

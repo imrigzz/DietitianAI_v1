@@ -1,0 +1,48 @@
+{% extends 'base.html' %} {% block title %} Food list {% endblock %}
+<!-- next -->
+{% block content %}
+
+
+
+<!-- food details tables -->
+<div class="row" style="margin:20px;">
+  <div class="col-12 text-center  ">
+    <!-- <div class="position-realtive overflow-hidden p-3 p-md-5 m-md-3 text-center " style="color:white"> -->
+      <div class="py-3 ">
+        <h1>FOOD LIST</h1>
+        <p>
+            AI version 1 currrently limited to this Indian foods only
+            <br>
+            We are constantly upgrading food support so keep tracking here
+            <br>
+        </p>
+        
+        <!-- <p>Click on one items to start buying</p> -->
+      </div>
+
+      <table class="table table-hover mt-3 w-75 mx-auto">
+        <thead>
+          <tr class="table-light">
+            <!-- Your Columns HERE -->
+            <!-- <th scope="col">ID</th> -->
+            <th scope="col">FOODS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Your rows inside the table HERE: -->
+          {% for food in foods %}
+          <!-- create a new modals per new items -->
+          <tr>
+            <td class="text-light">{{ food }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    <!-- </div> -->
+  </div>
+  
+
+</div>
+
+
+{% endblock %}
